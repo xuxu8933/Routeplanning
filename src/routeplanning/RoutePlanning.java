@@ -8,6 +8,7 @@ import java.io.File;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -99,207 +100,10 @@ public class RoutePlanning{
 		return path;
 	}
 
-		public static void getManeuverListFinal(List<Node> path){
-
-
-				String[] maneuverlist = new String[20];
-				int start_index = 0;
-				int maneuver_num = 0;
-				double temp_d = 0;
-				double D1 = 0;
-				double D2 = 0;
-				if (path.get(0).value.compareTo("2") == 0 &&
-					 path.get(1).value.compareTo("3") == 0 )
-				{
-					maneuverlist[0] = "Pull_out_left";
-					start_index = 1;
-					System.out.println("start park 2");
-//                    System.out.println("Maneuver: " + maneuverlist[0]);
-				}
-				else if (path.get(0).value.compareTo("2") == 0 &&
-						 path.get(1).value.compareTo("10") == 0 )
-				{
-					maneuverlist[0] = "Pull_out_right";
-					start_index = 1;
-					System.out.println("start park 2");
-//                    System.out.println("Maneuver: " + maneuverlist[0]);
-				}
-
-				for(int i = 0;i<path.size()-2;i++)
-				{
-					Node currentNode = path.get(i);
-					Node nextNode = path.get(i+1);
-					Node nextnextNode = path.get(i+2);
-
-					for(Edge e: currentNode.adjacencies){
-						if (e.target.value.compareTo(nextNode.value) == 0)
-						{
-							D1 = e.direction;
-							break;
-						}
-			
-					}
-
-					for(Edge e: nextnextNode.adjacencies){
-						if (e.target.value.compareTo(nextNode.value) == 0)
-						{
-							D2 = e.direction;
-							break;
-						}
-			
-					}
-						if (D2 == 0 )
-							temp_d = 180;
-						else if (D2 == 180 )
-							temp_d = 0;
-						else
-							temp_d = -D2;
-//                        
-						if (D1 - temp_d == 90 || D1 - temp_d == -270)
-							maneuverlist[i+start_index] = "right"; //right
-						else if (D1 - temp_d == -90 || D1 - temp_d == 270 )
-							maneuverlist[i+start_index] = "left";
-						else
-							maneuverlist[i+start_index] = "straight"; //straight
-//                        
-//                    System.out.println("Maneuver: " + maneuverlist[i+start_index]);
-				}
-				if (path.get(path.size()-1).value.compareTo("2") == 0 )
-				{
-					maneuverlist[path.size()-2+start_index] = "cross_parking";
-					maneuver_num = path.size()-2+start_index + 1;
-				}
-				else
-					maneuver_num = path.size()-2+start_index;
-
-				for (int i = 0;i<maneuver_num;i++)
-				{
-					System.out.println("Maneuver: " + maneuverlist[i]);
-
-				}
-
-	}
-
-		public static Node[] setGraphFinal(){
-
-				Node n1 = new Node("1");
-		Node n2 = new Node("2");
-		Node n3 = new Node("3");
-		Node n4 = new Node("4");
-		Node n5 = new Node("5");
-		Node n6 = new Node("6");
-		Node n7 = new Node("7");
-		Node n8 = new Node("8");
-		Node n9 = new Node("9");
-		Node n10 = new Node("10");
-		Node n11 = new Node("11");
-		Node n12 = new Node("12");
-		Node n13 = new Node("13");
-//		Node n14 = new Node("Giurgiu");
-
-				double length_curve_2_out = 137.4/60;
-				double length_curve_2_in = 98.2/50;
-				double length_curve_3_out = 216/70;
-				double length_curve_3_in = 176.7/60;
-				double length_s_curve = 190.5/50;
-				double length_straight = 50/100;
-				double length_stop = 3;
-
-
-		//initialize the edges
-		n1.adjacencies = new Edge[]{
-			new Edge(n3,2*length_straight + length_stop,-90),
-		};
-
-		n2.adjacencies = new Edge[]{
-			new Edge(n3,7*length_straight,90),
-			new Edge(n10,4*length_straight + length_stop,-90)
-		};
-
-		n3.adjacencies = new Edge[]{
-			new Edge(n1,2*length_straight, 90),
-			new Edge(n2,7*length_straight + 999, -90),
-						new Edge(n4,length_straight, 0),
-						new Edge(n10,13*length_straight + length_stop+999, -90)
-		};  
-
-
-		n4.adjacencies = new Edge[]{
-			new Edge(n3,length_straight + length_stop,180),
-			new Edge(n5,length_straight, 0),
-			new Edge(n6,4*length_straight,-90)
-		};
-
-		n5.adjacencies = new Edge[]{
-			new Edge(n4,length_straight, 180),
-			new Edge(n7,4*length_straight,-90),
-						new Edge(n8,4*length_straight + length_curve_2_in,-90),
-						new Edge(n11,length_straight,-90),
-			new Edge(n12,2*length_straight + length_curve_2_in,-90)
-		};
-
-		n6.adjacencies = new Edge[]{
-			new Edge(n4,4*length_straight + length_stop,90),
-			new Edge(n7,length_straight + length_stop,0),
-			new Edge(n9,5*length_straight + length_curve_2_out,0)
-		};
-
-		n7.adjacencies = new Edge[]{
-			new Edge(n5,4*length_straight + length_stop,90),
-			new Edge(n6,length_straight + length_stop,180),
-			new Edge(n8,2*length_straight + length_stop,0),
-						new Edge(n11,length_straight,90)
-				};
-
-		n8.adjacencies = new Edge[]{
-			new Edge(n5,4*length_straight + length_curve_2_out,180),
-						new Edge(n7,2*length_straight + length_stop,180),
-			new Edge(n9,3*length_straight,-90),                        
-			new Edge(n12,length_straight,90),                        
-			new Edge(n13,length_straight,-90)
-
-		};
-
-		n9.adjacencies = new Edge[]{
-						new Edge(n6,5*length_straight+length_curve_2_in,90),
-						new Edge(n8,2*length_straight,90),
-			new Edge(n10,3*length_straight + length_curve_2_in + length_s_curve,180),                        
-			new Edge(n13,length_straight,90)
-		};
-
-
-
-		n10.adjacencies = new Edge[]{
-						new Edge(n2,5*length_straight + 999,90),
-					new Edge(n3,13*length_straight + length_stop,90),
-						new Edge(n9,3*length_straight + length_curve_2_out + length_s_curve,90)
-		};    
-
-				n11.adjacencies = new Edge[]{
-					new Edge(n5,length_straight ,90),
-						new Edge(n7,length_straight ,-90)
-		};  
-
-				n12.adjacencies = new Edge[]{
-					new Edge(n5,length_straight + length_curve_2_out,180),
-						new Edge(n8,length_straight,-90)
-		};  
-
-			n13.adjacencies = new Edge[]{
-					new Edge(n8,length_straight,90),
-						new Edge(n9,length_straight,-90)
-				};
-
-		Node[] nodes = {n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,n13};
-
-				return nodes;
-	}
- 
-
 		  public static String[] getManeuverList(List<Node> path){
 
 
-				String[] maneuverlist = new String[20];
+				String[] maneuverlist = new String[path.size()-1];
 				int start_index = 0;
 				int maneuver_num = 0;
 				int mm = 0;
@@ -336,79 +140,6 @@ public class RoutePlanning{
 
 				}
 				return maneuverlist;
-//				double temp_d = 0;
-//				double D1 = 0;
-//				double D2 = 0;
-//				if (path.get(0).value.compareTo("1") == 0 &&
-//					 path.get(1).value.compareTo("4") == 0 )
-//				{
-//					maneuverlist[0] = "Pull_out_left";
-//					start_index = 1;
-//					System.out.println("start park 2");
-////                    System.out.println("Maneuver: " + maneuverlist[0]);
-//				}
-//				else if (path.get(0).value.compareTo("1") == 0 &&
-//						 path.get(1).value.compareTo("2") == 0 )
-//				{
-//					maneuverlist[0] = "Pull_out_right";
-//					start_index = 1;
-//					System.out.println("start park 2");
-////                    System.out.println("Maneuver: " + maneuverlist[0]);
-//				}
-//
-//				for(int i = 0;i<path.size()-2;i++)
-//				{
-//					Node currentNode = path.get(i);
-//					Node nextNode = path.get(i+1);
-//					Node nextnextNode = path.get(i+2);
-//
-//					for(Edge e: currentNode.adjacencies){
-//						if (e.target.value.compareTo(nextNode.value) == 0)
-//						{
-//							D1 = e.direction;
-//							break;
-//						}
-//
-//					}
-//
-//					for(Edge e: nextnextNode.adjacencies){
-//						if (e.target.value.compareTo(nextNode.value) == 0)
-//						{
-//							D2 = e.direction;
-//							break;
-//						}
-//
-//					}
-//						if (D2 == 0 )
-//							temp_d = 180;
-//						else if (D2 == 180 )
-//							temp_d = 0;
-//						else
-//							temp_d = -D2;
-////
-//						if (D1 - temp_d == 90 || D1 - temp_d == -270)
-//							maneuverlist[i+start_index] = "right"; //right
-//						else if (D1 - temp_d == -90 || D1 - temp_d == 270 )
-//							maneuverlist[i+start_index] = "left";
-//						else
-//							maneuverlist[i+start_index] = "straight"; //straight
-////
-////                    System.out.println("Maneuver: " + maneuverlist[i+start_index]);
-//				}
-//				if (path.get(path.size()-1).value.compareTo("1") == 0 )
-//				{
-//					maneuverlist[path.size()-2+start_index] = "cross_parking";
-//					maneuver_num = path.size()-2+start_index + 1;
-//				}
-//				else
-//					maneuver_num = path.size()-2+start_index;
-
-//				for (int i = 0;i<maneuver_num;i++)
-//				{
-//					System.out.println("Maneuver: " + maneuverlist[i]);
-//
-//				}
-
 	}
 
 
@@ -505,7 +236,7 @@ public class RoutePlanning{
 
 				return nodes;
 	}
-	public static final String xmlFilePath = "C:\\Users\\xuhu7477\\IdeaProjects\\Routeplanning\\src\\xmlfile.xml";
+	public static final String xmlFilePath = "./maneuverlist.xml";
 
 	public static void main(String[] args){
 
@@ -519,35 +250,8 @@ public class RoutePlanning{
 		}
 		hops[args.length+1] = 1;
 		int start_node = 1;
-//		Node[] nodes = setGraphFinal();   // map in the final
 		Node[] nodes = setGraph();  // map in the uni
 
-
-//		Node[] nodes = setGraph();
-//		int start_node = 1;
-//		int end_node = 6;
-//		//compute paths
-//
-//		computePaths(nodes[start_node-1]);
-//
-//		List<Node> path = getShortestPathTo(nodes[end_node-1]);
-//		System.out.println("Path: " + path);
-//
-////                getManeuverListFinal(path);   // map in the final
-//		getManeuverList(path);   // map in the uni
-//
-//		nodes = setGraph();
-//		start_node = 6;
-//		end_node = 7;
-//		//compute paths
-//
-//		computePaths(nodes[start_node-1]);
-//
-//		path = getShortestPathTo(nodes[end_node-1]);
-//		System.out.println("Path: " + path);
-//
-////                getManeuverListFinal(path);   // map in the final
-//		getManeuverList(path);   // map in the uni
 		try {
 
 			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
@@ -559,7 +263,9 @@ public class RoutePlanning{
 			// root element
 			Element root = document.createElement("AADC-Maneuver-List");
 			document.appendChild(root);
-
+			Attr attrd = document.createAttribute("description");
+			attrd.setValue("Teststrecke");
+			root.setAttributeNode(attrd);
 			// employee element
 			Element Sector = document.createElement("AADC-Sector");
 
@@ -599,10 +305,23 @@ public class RoutePlanning{
 				Attr attr2 = document.createAttribute("action");
 				attr2.setValue(maneuverList[j]);
 				Maneuver.setAttributeNode(attr2);
+
+				if(maneuverList[j].equals("cross_parking")) {
+					Attr attr3 = document.createAttribute("extra");
+					attr3.setValue("2");
+					Maneuver.setAttributeNode(attr3);
+				}
+
 			}
 			}
 			//you can also use staff.setAttribute("id", "1") for this
 
+/*<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+<AADC-Maneuver-List description="Teststrecke">
+	<AADC-Sector id="0">
+		<AADC-Maneuver id="0" action="cross_parking" extra="2"/>
+	</AADC-Sector>
+</AADC-Maneuver-List>*/
 
 
 			// create the xml file
@@ -611,9 +330,11 @@ public class RoutePlanning{
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource domSource = new DOMSource(document);
 			StreamResult streamResult = new StreamResult(new File(xmlFilePath));
-
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.ENCODING, "iso-8859-1");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 			// If you use
-			// StreamResult result = new StreamResult(System.out);
+			 StreamResult result = new StreamResult(System.out);
 			// the output will be pushed to the standard output ...
 			// You can use that for debugging
 
