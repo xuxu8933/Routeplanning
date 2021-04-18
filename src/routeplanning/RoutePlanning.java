@@ -14,15 +14,23 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import com.google.ortools.Loader;
+import com.google.ortools.constraintsolver.Assignment;
+import com.google.ortools.constraintsolver.RoutingIndexManager;
+import com.google.ortools.constraintsolver.RoutingModel;
+import com.optimization.MIP.MIP_Test;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import java.io.IOException;
-import java.io.StringWriter;
+import com.google.ortools.constraintsolver.Assignment;
+import com.google.ortools.constraintsolver.FirstSolutionStrategy;
+import com.google.ortools.constraintsolver.RoutingIndexManager;
+import com.google.ortools.constraintsolver.RoutingModel;
+import com.google.ortools.constraintsolver.RoutingSearchParameters;
+import com.google.ortools.constraintsolver.main;
+import java.util.logging.Logger;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 /**
  *
  * @author xuhu7477
@@ -35,18 +43,36 @@ import javax.xml.stream.XMLStreamWriter;
 //    public static void main(String[] args) {
 //        // TODO code application logic here
 //    }
-//    
+//
 //}
 
 
-import java.util.PriorityQueue;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-
+import java.util.*;
 
 
 public class RoutePlanning{
+	private static final Logger logger = Logger.getLogger(MIP_Test.class.getName());
+
+	/// @brief Print the solution.
+	static void printSolution(
+			RoutingModel routing, RoutingIndexManager manager, Assignment solution) {
+		// Solution cost.
+		logger.info("Objective: " + solution.objectiveValue() + "miles");
+		// Inspect solution.
+		logger.info("Route:");
+		long routeDistance = 0;
+		String route = "";
+		long index = routing.start(0);
+		while (!routing.isEnd(index)) {
+			route += manager.indexToNode(index) + " -> ";
+			long previousIndex = index;
+			index = solution.value(routing.nextVar(index));
+			routeDistance += routing.getArcCostForVehicle(previousIndex, index, 0);
+		}
+		route += manager.indexToNode(routing.end(0));
+		logger.info(route);
+		logger.info("Route distance: " + routeDistance + "miles");
+	}
 /* Dijkstra Algorithm
  * 
  *
@@ -83,6 +109,7 @@ public class RoutePlanning{
 				}
 			}
 		}
+
 	}
 
 	public static List<Node> getShortestPathTo(Node target){
@@ -99,14 +126,28 @@ public class RoutePlanning{
 
 		return path;
 	}
-
+	public static Integer getDistance(List<Node> path){
+		int path_dist = 0;
+		for(int i = 0;i<path.size()-1;i++)
+		{
+			Node currentNode = path.get(i);
+			Node nextNode = path.get(i+1);
+//
+			for(Edge e: currentNode.adjacencies) {
+				if (e.target.value.compareTo(nextNode.value) == 0) {
+					path_dist = path_dist + e.weight;
+				}
+			}
+		}
+		return path_dist;
+	}
 		  public static String[] getManeuverList(List<Node> path){
 
 
 				String[] maneuverlist = new String[path.size()-1];
 				int start_index = 0;
 				int maneuver_num = 0;
-				int mm = 0;
+
 			  	for(int i = 0;i<path.size()-1;i++)
 				{
 					Node currentNode = path.get(i);
@@ -115,6 +156,8 @@ public class RoutePlanning{
 					for(Edge e: currentNode.adjacencies){
 						if (e.target.value.compareTo(nextNode.value) == 0)
 						{
+//							path_dist=path_dist+e.weight;
+
 							switch (e.direction){
 								case 0:
 									maneuverlist[i+start_index] = "straight"; break; //right
@@ -132,7 +175,9 @@ public class RoutePlanning{
 							break;
 						}
 					}
+
 				}
+//			 	 System.out.println(path_dist);
 			  	maneuver_num = path.size()-1;
 				for (int i = 0;i<maneuver_num;i++)
 				{
@@ -160,58 +205,58 @@ public class RoutePlanning{
 //		Node n14 = new Node("Giurgiu");
 
 				double length_curve_2_out = 137.4/60;
-				double length_curve_2_in = 98.2/50;
+				double length_curve_2_in = 2;
 				double length_curve_3_out = 216/70;
 				double length_curve_3_in = 176.7/60;
 				double length_s_curve = 190.5/50;
-				double length_straight = 50/100;
+				int length_straight = 2;
 				double length_stop = 3;
 
 
 		//initialize the edges clockwise:1, counterclockwise:-1, straight:0, pull_left:2, pull_right:3, park:4
 		n1.adjacencies = new Edge[]{
-			new Edge(n2,8*length_straight ,3),
-			new Edge(n3,16*length_straight ,2)
+			new Edge(n2,2*length_straight ,3),
+			new Edge(n3,8*length_straight ,2)
 		};
 
 		n2.adjacencies = new Edge[]{
-			new Edge(n1,3*length_straight,4),
+			new Edge(n1,8*length_straight,4),
 			new Edge(n4,3*length_straight,0),
-			new Edge(n6,2*length_straight,-1),
-			new Edge(n11,length_straight ,1)
+			new Edge(n6,4*length_straight,-1),
+			new Edge(n11,3*length_straight ,1)
 		};
 
 		n3.adjacencies = new Edge[]{
-			new Edge(n9,3*length_straight, 0),
-			new Edge(n10,2*length_straight + length_curve_2_in, -1)
+			new Edge(n9,4*length_straight, 0),
+			new Edge(n10,4*length_straight, -1)
 		};  
 
 
 		n4.adjacencies = new Edge[]{
-			new Edge(n7,16*length_straight ,-1),
-			new Edge(n8,2*length_straight, 1)
+			new Edge(n7,4*length_straight ,-1),
+			new Edge(n8,3*length_straight, 1)
 		};
 
 		n5.adjacencies = new Edge[]{
-			new Edge(n3,length_straight, 0),
-			new Edge(n6,3*length_straight,1),
-			new Edge(n11,length_straight ,-1)
+			new Edge(n3,3*length_straight, 0),
+			new Edge(n6,4*length_straight,1),
+			new Edge(n11,3*length_straight ,-1)
 		};
 
 		n6.adjacencies = new Edge[]{
-			new Edge(n5,length_straight ,1),
-			new Edge(n8,3*length_straight ,0),
+			new Edge(n5,4*length_straight ,1),
+			new Edge(n8,4*length_straight ,0),
 		};
 
 		n7.adjacencies = new Edge[]{
-			new Edge(n3,length_straight ,1),
-			new Edge(n4,length_straight ,-1),
-            new Edge(n11,length_straight ,0)
+			new Edge(n3,5*length_straight ,1),
+			new Edge(n4,4*length_straight ,-1),
+            new Edge(n11,4*length_straight ,0)
 		};
 
 		n8.adjacencies = new Edge[]{
-			new Edge(n2,length_straight ,0),
-			new Edge(n10,length_straight ,1)
+			new Edge(n2,4*length_straight ,0),
+			new Edge(n10,2*length_straight ,1)
 		};
 
             n9.adjacencies = new Edge[]{
@@ -220,14 +265,14 @@ public class RoutePlanning{
             };
 
             n10.adjacencies = new Edge[]{
-                    new Edge(n3,length_straight ,-1),
-                    new Edge(n4,length_straight ,1),
-                    new Edge(n6,length_straight ,0)
+                    new Edge(n3,3*length_straight ,-1),
+                    new Edge(n4,2*length_straight ,1),
+                    new Edge(n6,4*length_straight ,0)
             };
 
             n11.adjacencies = new Edge[]{
-                    new Edge(n2,length_straight ,1),
-                    new Edge(n9,length_straight ,-1)
+                    new Edge(n2,4*length_straight ,1),
+                    new Edge(n9,3*length_straight ,-1)
             };
 
 
@@ -249,9 +294,82 @@ public class RoutePlanning{
 			System.out.println("hops: " + hops[i+1]);
 		}
 		hops[args.length+1] = 1;
-		int start_node = 1;
-		Node[] nodes = setGraph();  // map in the uni
+//		int start_node = 1;
 
+		long[][] distanceMatrix = new long[args.length+1][args.length+1];
+		for(int i =0;i<args.length+1;i++){
+			Node[] nodes = setGraph();  // map in the uni
+			int start_node = hops[i];
+			for(int j =0;j<args.length+1;j++){
+				int end_node = hops[j];
+				//compute paths
+				computePaths(nodes[start_node-1]);
+
+				List<Node> path = getShortestPathTo(nodes[end_node-1]);
+				System.out.println("Path from " + start_node + " to " + end_node + ":" + path);
+
+				getManeuverList(path);   // map in the uni
+				distanceMatrix[i][j] = getDistance(path);
+			}
+		}
+		for (int i = 0; i < distanceMatrix.length; i++) {
+			System.out.println(Arrays.toString(distanceMatrix[i]));
+		}
+
+		Loader.loadNativeLibraries();
+		// Instantiate the data problem.
+//		final RoutePlanning.DataModel data = new RoutePlanning.DataModel();
+
+		// Create Routing Index Manager
+		RoutingIndexManager manager =
+				new RoutingIndexManager(distanceMatrix.length, 1, 0);
+
+		// Create Routing Model.
+		RoutingModel routing = new RoutingModel(manager);
+
+		// Create and register a transit callback.
+		final int transitCallbackIndex =
+				routing.registerTransitCallback((long fromIndex, long toIndex) -> {
+					// Convert from routing variable Index to user NodeIndex.
+					int fromNode = manager.indexToNode(fromIndex);
+					int toNode = manager.indexToNode(toIndex);
+					return distanceMatrix[fromNode][toNode];
+				});
+
+		// Define cost of each arc.
+		routing.setArcCostEvaluatorOfAllVehicles(transitCallbackIndex);
+
+		// Setting first solution heuristic.
+		RoutingSearchParameters searchParameters =
+				main.defaultRoutingSearchParameters()
+						.toBuilder()
+						.setFirstSolutionStrategy(FirstSolutionStrategy.Value.PATH_CHEAPEST_ARC)
+						.build();
+
+		// Solve the problem.
+		Assignment solution = routing.solveWithParameters(searchParameters);
+
+		// Print solution on console.
+//		printSolution(routing, manager, solution);
+
+		long index = routing.start(0);
+//		hops[0] = 1;
+		int[] newhops = new int[5];
+		int ii = 0;
+		while (!routing.isEnd(index)) {
+//			System.out.println(manager.indexToNode(index) );
+			newhops[ii] = hops[(int) index];
+			long previousIndex = index;
+			index = solution.value(routing.nextVar(index));
+//			routeDistance += routing.getArcCostForVehicle(previousIndex, index, 0);
+//			System.out.println(index);
+			ii++;
+		}
+		newhops[ii] = 1;
+		for(int i=0;i< newhops.length;i++)
+			System.out.println(newhops[i]);
+//		hops[ii]=1;
+//		route += manager.indexToNode(routing.end(0));
 		try {
 
 			DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
@@ -275,23 +393,25 @@ public class RoutePlanning{
 			Attr attr = document.createAttribute("id");
 			attr.setValue("0");
 			Sector.setAttributeNode(attr);
-
+			Node[] nodes = setGraph();
+			int start_node = 1;
 			String maneuverList[] = new String[20];
-
+			int maneuverCounter = 0;
+			int total_dist = 0;
 			for(int i = 0; i<hops.length;i++) {
 
 
-				int end_node = hops[i];
+				int end_node = newhops[i];
 				//compute paths
 				computePaths(nodes[start_node-1]);
 
 				List<Node> path = getShortestPathTo(nodes[end_node-1]);
 				System.out.println("Path: " + path);
 
-//                getManeuverListFinal(path);   // map in the final
 				maneuverList = getManeuverList(path);   // map in the uni
 				nodes = setGraph();
 				start_node = hops[i];
+				total_dist = total_dist+getDistance(path);
 			for (int j=0;j<maneuverList.length;j++){
 				Element Maneuver = document.createElement("AADC-Maneuver");
 
@@ -299,9 +419,9 @@ public class RoutePlanning{
 
 				// set an attribute to staff element
 				Attr attr1 = document.createAttribute("id");
-				attr1.setValue("2");
+				attr1.setValue(String.valueOf(maneuverCounter));
 				Maneuver.setAttributeNode(attr1);
-
+				maneuverCounter++;
 				Attr attr2 = document.createAttribute("action");
 				attr2.setValue(maneuverList[j]);
 				Maneuver.setAttributeNode(attr2);
@@ -315,13 +435,14 @@ public class RoutePlanning{
 			}
 			}
 			//you can also use staff.setAttribute("id", "1") for this
-
-/*<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
-<AADC-Maneuver-List description="Teststrecke">
-	<AADC-Sector id="0">
-		<AADC-Maneuver id="0" action="cross_parking" extra="2"/>
-	</AADC-Sector>
-</AADC-Maneuver-List>*/
+			System.out.println("Total maneuvers: "+maneuverCounter);
+			System.out.println("Total distance: "+total_dist);
+//<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+//<AADC-Maneuver-List description="Teststrecke">
+//	<AADC-Sector id="0">
+//		<AADC-Maneuver id="0" action="cross_parking" extra="2"/>
+//	</AADC-Sector>
+//</AADC-Maneuver-List>
 
 
 			// create the xml file
@@ -380,9 +501,9 @@ class Node implements Comparable<Node>{
 //define Edge
 class Edge{
 	public final Node target;
-	public final double weight;
+	public final int weight;
 		public final int direction;
-	public Edge(Node targetNode, double weightVal, int directionVal){
+	public Edge(Node targetNode, int weightVal, int directionVal){
 		target = targetNode;
 		weight = weightVal;
 				direction = directionVal;
