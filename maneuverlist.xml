@@ -6,11 +6,19 @@
     </AADC-Sector>
     <AADC-Sector id="1">
         <AADC-Maneuver action="straight" id="2"/>
-        <AADC-Maneuver action="right" id="3"/>
-        <AADC-Maneuver action="car_stop" extra="29" id="4"/>
+        <AADC-Maneuver action="car_stop" extra="27" id="3"/>
     </AADC-Sector>
     <AADC-Sector id="2">
-        <AADC-Maneuver action="straight" id="5"/>
-        <AADC-Maneuver action="cross_parking" extra="2" id="6"/>
+        <AADC-Maneuver action="left" id="4"/>
+        <AADC-Maneuver action="car_stop" extra="25" id="5"/>
+    </AADC-Sector>
+    <AADC-Sector id="3">
+        <AADC-Maneuver action="left" id="6"/>
+        <AADC-Maneuver action="right" id="7"/>
+        <AADC-Maneuver action="car_stop" extra="29" id="8"/>
+    </AADC-Sector>
+    <AADC-Sector id="4">
+        <AADC-Maneuver action="straight" id="9"/>
+        <AADC-Maneuver action="cross_parking" extra="2" id="10"/>
     </AADC-Sector>
 </AADC-Maneuver-List>
