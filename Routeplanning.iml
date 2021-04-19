@@ -7,63 +7,22 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/jna-platform-5.7.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/jna-5.7.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/or-tools_MacOsX-11.2.1_v8.2.8710/ortools-java-8.2.8710.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/or-tools_MacOsX-11.2.1_v8.2.8710/ortools-darwin-8.2.8710.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/or-tools_MacOsX-11.2.1_v8.2.8710/ortools-darwin-8.2.8710-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/jna-5.8.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/jna-platform-5.8.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ortools-java-8.2.8710.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ortools-win32-x86-64-8.2.8710-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ortools-win32-x86-64-8.2.8710.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/protobuf-java-3.5.1.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$USER_HOME$/Downloads/or-tools_MacOsX-11.2.1_v8.2.8710/ortools-java-8.2.8710-javadoc.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/protobuf-java-3.5.1-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$USER_HOME$/Downloads/or-tools_MacOsX-11.2.1_v8.2.8710/ortools-java-8.2.8710-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ortools-java-8.2.8710-sources.jar!/" />
         </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/protobuf-java-3.6.1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
       </library>
     </orderEntry>
   </component>
