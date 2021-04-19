@@ -6,21 +6,19 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/jna-5.8.0.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/jna-platform-5.8.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ortools-darwin-8.2.8710-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ortools-darwin-8.2.8710.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/ortools-java-8.2.8710.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/ortools-win32-x86-64-8.2.8710-sources.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/ortools-win32-x86-64-8.2.8710.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/protobuf-java-3.5.1.jar!/" />
-          <root url="jar://$MODULE_DIR$/lib/ortools-darwin-8.2.8710.jar!/" />
-          <root url="jar://$MODULE_DIR$/lib/ortools-darwin-8.2.8710-sources.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$MODULE_DIR$/lib/ortools-java-8.2.8710-javadoc.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/protobuf-java-3.5.1-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
@@ -28,5 +26,6 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
