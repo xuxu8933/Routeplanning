@@ -20,7 +20,7 @@ import com.google.ortools.Loader;
 import com.google.ortools.constraintsolver.Assignment;
 import com.google.ortools.constraintsolver.RoutingIndexManager;
 import com.google.ortools.constraintsolver.RoutingModel;
-import com.optimization.MIP.MIP_Test;
+//import com.optimization.MIP.MIP_Test;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -53,28 +53,28 @@ import java.util.*;
 
 
 public class RoutePlanning {
-    private static final Logger logger = Logger.getLogger(MIP_Test.class.getName());
-
-    /// @brief Print the solution.
-    static void printSolution(
-            RoutingModel routing, RoutingIndexManager manager, Assignment solution) {
-        // Solution cost.
-        logger.info("Objective: " + solution.objectiveValue() + "miles");
-        // Inspect solution.
-        logger.info("Route:");
-        long routeDistance = 0;
-        String route = "";
-        long index = routing.start(0);
-        while (!routing.isEnd(index)) {
-            route += manager.indexToNode(index) + " -> ";
-            long previousIndex = index;
-            index = solution.value(routing.nextVar(index));
-            routeDistance += routing.getArcCostForVehicle(previousIndex, index, 0);
-        }
-        route += manager.indexToNode(routing.end(0));
-        logger.info(route);
-        logger.info("Route distance: " + routeDistance + "miles");
-    }
+//    private static final Logger logger = Logger.getLogger(MIP_Test.class.getName());
+//
+//    /// @brief Print the solution.
+//    static void printSolution(
+//            RoutingModel routing, RoutingIndexManager manager, Assignment solution) {
+//        // Solution cost.
+//        logger.info("Objective: " + solution.objectiveValue() + "miles");
+//        // Inspect solution.
+//        logger.info("Route:");
+//        long routeDistance = 0;
+//        String route = "";
+//        long index = routing.start(0);
+//        while (!routing.isEnd(index)) {
+//            route += manager.indexToNode(index) + " -> ";
+//            long previousIndex = index;
+//            index = solution.value(routing.nextVar(index));
+//            routeDistance += routing.getArcCostForVehicle(previousIndex, index, 0);
+//        }
+//        route += manager.indexToNode(routing.end(0));
+//        logger.info(route);
+//        logger.info("Route distance: " + routeDistance + "miles");
+//    }
 
     /* Dijkstra Algorithm
      *

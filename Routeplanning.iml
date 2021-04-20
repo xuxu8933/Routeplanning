@@ -17,6 +17,8 @@
           <root url="jar://$MODULE_DIR$/lib/ortools-win32-x86-64-8.2.8710-sources.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/ortools-win32-x86-64-8.2.8710.jar!/" />
           <root url="jar://$MODULE_DIR$/lib/protobuf-java-3.5.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ortools-linux-x86-64-8.2.8710-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ortools-linux-x86-64-8.2.8710.jar!/" />
         </CLASSES>
         <JAVADOC>
           <root url="jar://$MODULE_DIR$/lib/protobuf-java-3.5.1-javadoc.jar!/" />

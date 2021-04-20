@@ -9,6 +9,10 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/ortools-win32-x86-64-8.2.8710-sources.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/ortools-win32-x86-64-8.2.8710.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/protobuf-java-3.5.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/ortools-darwin-8.2.8710-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/ortools-darwin-8.2.8710.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/ortools-linux-x86-64-8.2.8710-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/ortools-linux-x86-64-8.2.8710.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
